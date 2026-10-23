@@ -1,0 +1,16 @@
+# Secrets & build output of the deploy tool
+deploy/deploy.env
+deploy/.env.production
+deploy/.build/
+deploy/releases/*.zip
+
+# Dependencies / builds
+node_modules/
+backend/vendor/
+backend/composer.sandbox.*
+frontend/dist/
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

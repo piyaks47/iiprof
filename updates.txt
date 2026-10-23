@@ -1,0 +1,8 @@
+update:  20/10/2026
+the below folder structure with basic requirements of tech stack is setup:
+public_html/
+├── iiprof-api/         # Laravel Backend API (Connects to MySQL & Redis)
+├── iiprof/             # Next.js Website Frontend (Points to API endpoints)
+└── iiprof-mobile/      # React Native (Expo) Mobile App
+
+

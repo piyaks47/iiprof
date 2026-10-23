@@ -1,0 +1,173 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/livewire/src/Features/SupportPagination/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views';
+@source '../js';
+
+/*
+ * Admin theme — executive navy & champagne gold, matching the website.
+ * Change the tokens below to re-skin the whole admin.
+ */
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
+    --color-brand-50: #f2f5fa;
+    --color-brand-100: #e1e8f3;
+    --color-brand-200: #c3d0e5;
+    --color-brand-300: #94a9cc;
+    --color-brand-400: #5f7cab;
+    --color-brand-500: #3d5c8d;
+    --color-brand-600: #2a4676;
+    --color-brand-700: #1d355f;
+    --color-brand-800: #142749;
+    --color-brand-900: #0c1a33;
+    --color-brand-950: #070f20;
+
+    --color-gold-50: #fbf7ec;
+    --color-gold-100: #f5ecd1;
+    --color-gold-200: #ebd8a6;
+    --color-gold-300: #dfc17a;
+    --color-gold-400: #d1aa5a;
+    --color-gold-500: #c09443;
+    --color-gold-600: #a37836;
+    --color-gold-700: #835c2e;
+
+    --color-canvas: #f5f6f9;
+
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-snappy: cubic-bezier(0.2, 0.9, 0.25, 1);
+
+    --animate-page-in: page-in 0.45s var(--ease-out-expo) both;
+    --animate-pop-in: pop-in 0.22s var(--ease-snappy) both;
+    --animate-toast-in: toast-in 0.4s var(--ease-out-expo) both;
+    --animate-shine: shine 2.6s ease-in-out infinite;
+
+    @keyframes page-in {
+        from { opacity: 0; transform: translate3d(0, 10px, 0); }
+        to { opacity: 1; transform: none; }
+    }
+    @keyframes pop-in {
+        from { opacity: 0; transform: translate3d(0, -8px, 0) scale(0.98); }
+        to { opacity: 1; transform: none; }
+    }
+    @keyframes toast-in {
+        from { opacity: 0; transform: translate3d(24px, 0, 0); }
+        to { opacity: 1; transform: none; }
+    }
+    @keyframes shine {
+        0%, 60% { background-position: -150% 0; }
+        100% { background-position: 250% 0; }
+    }
+    @keyframes grow {
+        from { transform: scaleY(0); }
+    }
+    @keyframes grow-x {
+        from { transform: scaleX(0); }
+    }
+}
+
+/* Dashboard chart columns grow from their base. */
+.chart-col { transform-box: fill-box; transform-origin: bottom; }
+
+@layer base {
+    [x-cloak] { display: none !important; }
+
+    :root { color-scheme: light; }
+    body { background: var(--color-canvas); }
+    ::selection { background: var(--color-gold-200); color: var(--color-brand-950); }
+    :focus-visible { outline: 2px solid var(--color-gold-400); outline-offset: 2px; }
+}
+
+/* ---------------------------------------------------------------------------
+ * Sidebar
+ * ------------------------------------------------------------------------- */
+.sb {
+    width: 17rem;
+    transition: width 0.35s var(--ease-out-expo), transform 0.35s var(--ease-out-expo);
+}
+.sb-main { transition: padding-left 0.35s var(--ease-out-expo); }
+
+@media (min-width: 64rem) {
+    .sb-main { padding-left: 17rem; }
+    html[data-rail] .sb { width: 5.25rem; }
+    html[data-rail] .sb-main { padding-left: 5.25rem; }
+    html[data-rail] .sb-hide-rail { opacity: 0; width: 0; flex: 0 0 0 !important; overflow: hidden; pointer-events: none; }
+    html[data-rail] .sb-group-title { height: 0; padding: 0; opacity: 0; overflow: hidden; }
+    html[data-rail] .sb-group + .sb-group { border-top: 1px solid rgb(255 255 255 / 0.06); padding-top: 0.75rem; }
+    html[data-rail] .sb-link { justify-content: center; padding-inline: 0; }
+    html[data-rail] .sb-link .sb-badge { position: absolute; top: 0.2rem; right: 0.6rem; }
+    html[data-rail] .sb-rail-flip { transform: rotate(180deg); }
+}
+.sb-hide-rail, .sb-group-title {
+    transition: opacity 0.2s ease, width 0.35s var(--ease-out-expo), height 0.25s ease;
+}
+
+/* Scroll area: thin gold scrollbar on hover, soft fades where content continues. */
+.sb-scroll {
+    --fade-top: 0px;
+    --fade-bottom: 0px;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    scrollbar-gutter: stable;
+    mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade-top), #000 calc(100% - var(--fade-bottom)), transparent 100%);
+    transition: scrollbar-color 0.3s ease;
+}
+.sb-scroll[data-top='false'] { --fade-top: 28px; }
+.sb-scroll[data-bottom='false'] { --fade-bottom: 36px; }
+.sb-scroll:hover, .sb-scroll:focus-within { scrollbar-color: rgb(209 170 90 / 0.45) transparent; }
+.sb-scroll::-webkit-scrollbar { width: 6px; }
+.sb-scroll::-webkit-scrollbar-track { background: transparent; }
+.sb-scroll::-webkit-scrollbar-thumb { background: transparent; border-radius: 999px; }
+.sb-scroll:hover::-webkit-scrollbar-thumb { background: rgb(209 170 90 / 0.45); }
+
+.sb-link {
+    position: relative;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.sb-link::before {
+    content: '';
+    position: absolute;
+    left: -0.75rem;
+    top: 50%;
+    height: 0;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(var(--color-gold-300), var(--color-gold-500));
+    box-shadow: 0 0 12px rgb(209 170 90 / 0.7);
+    transform: translateY(-50%);
+    transition: height 0.3s var(--ease-out-expo);
+}
+.sb-link[aria-current='page']::before { height: 60%; }
+.sb-link .sb-label { transition: transform 0.25s var(--ease-out-expo); }
+.sb-link:hover .sb-label { transform: translateX(2px); }
+
+/* Generic thin scrollbar (tables, palette). */
+.scroll-thin { scrollbar-width: thin; scrollbar-color: rgb(148 169 204 / 0.5) transparent; }
+
+/* Gold sheen for primary call-to-action surfaces. */
+.sheen {
+    background-image: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.35) 50%, transparent 70%);
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+}
+
+/* Fine lattice used on dark brand surfaces. */
+.lattice {
+    background-image:
+        linear-gradient(to right, rgb(209 170 90 / 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(209 170 90 / 0.08) 1px, transparent 1px);
+    background-size: 44px 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
